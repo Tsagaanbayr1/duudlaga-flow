@@ -1,0 +1,38 @@
+name: DuudlagaFlow
+options:
+  bundleIdPrefix: com.chimege
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+
+targets:
+  DuudlagaFlow:
+    type: application
+    platform: macOS
+    sources:
+      - DuudlagaFlow
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.chimege.DuudlagaFlow
+        PRODUCT_NAME: DuudlagaFlow
+        MARKETING_VERSION: "1.0.0"
+        CURRENT_PROJECT_VERSION: "1"
+        INFOPLIST_FILE: DuudlagaFlow/Info.plist
+        CODE_SIGN_ENTITLEMENTS: DuudlagaFlow/DuudlagaFlow.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"
+        DEVELOPMENT_TEAM: ""
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        COMBINE_HIDPI_IMAGES: YES
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/../Frameworks"
+        GENERATE_INFOPLIST_FILE: NO
+        ENABLE_APP_SANDBOX: NO
