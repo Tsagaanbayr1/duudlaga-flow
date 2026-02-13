@@ -21,7 +21,7 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.chimege.DuudlagaFlow
         PRODUCT_NAME: DuudlagaFlow
-        MARKETING_VERSION: "1.0.0"
+        MARKETING_VERSION: "1.1.0"
         CURRENT_PROJECT_VERSION: "1"
         INFOPLIST_FILE: DuudlagaFlow/Info.plist
         CODE_SIGN_ENTITLEMENTS: DuudlagaFlow/DuudlagaFlow.entitlements
