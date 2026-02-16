@@ -1,0 +1,44 @@
+<UserControl x:Class="DuudlagaFlow.Views.Settings.GeneralSettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Padding="16">
+
+    <StackPanel>
+        <!-- API Token -->
+        <TextBlock Text="Chimege API Token" Style="{StaticResource FormLabel}"/>
+        <TextBlock Text="console.chimege.com хаягаас token авна уу" Style="{StaticResource FormDescription}" Margin="0,0,0,6"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <PasswordBox x:Name="TokenBox" MaxLength="200" Padding="8,6"
+                         PasswordChanged="OnTokenChanged"/>
+            <Button Grid.Column="1" Content="Шалгах" Margin="8,0,0,0"
+                    Style="{StaticResource SecondaryButton}"
+                    Click="OnTestTokenClick" x:Name="TestTokenButton"/>
+        </Grid>
+        <TextBlock x:Name="TokenStatus" Margin="0,4,0,0" FontSize="11"/>
+
+        <Separator Margin="0,16"/>
+
+        <!-- Punctuation -->
+        <CheckBox x:Name="PunctuateCheck" Content="Цэг тэмдэг автоматаар нэмэх"
+                  Margin="0,8" Checked="OnPunctuateChanged" Unchecked="OnPunctuateChanged"/>
+
+        <Separator Margin="0,8"/>
+
+        <!-- Launch at startup -->
+        <CheckBox x:Name="LaunchAtLoginCheck" Content="Компьютер асах үед автоматаар эхлэх"
+                  Margin="0,8" Checked="OnLaunchAtLoginChanged" Unchecked="OnLaunchAtLoginChanged"/>
+
+        <Separator Margin="0,8"/>
+
+        <!-- Console link -->
+        <TextBlock Margin="0,8">
+            <Hyperlink Click="OnConsoleClick">
+                Chimege Console нээх
+            </Hyperlink>
+        </TextBlock>
+    </StackPanel>
+</UserControl>

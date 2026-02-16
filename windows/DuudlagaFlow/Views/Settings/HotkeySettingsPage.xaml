@@ -1,0 +1,48 @@
+<UserControl x:Class="DuudlagaFlow.Views.Settings.HotkeySettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Padding="16">
+
+    <StackPanel>
+        <!-- Current hotkey display -->
+        <TextBlock Text="Товчлуур" Style="{StaticResource FormLabel}"/>
+        <Border Background="#F3F4F6" CornerRadius="6" Padding="12,8" Margin="0,4,0,16">
+            <StackPanel Orientation="Horizontal">
+                <Border Background="#E5E7EB" CornerRadius="4" Padding="8,4" Margin="0,0,4,0">
+                    <TextBlock Text="Ctrl" FontWeight="SemiBold" FontSize="12"/>
+                </Border>
+                <TextBlock Text="+" VerticalAlignment="Center" Margin="4,0" FontSize="12"/>
+                <Border Background="#E5E7EB" CornerRadius="4" Padding="8,4" Margin="4,0,0,0">
+                    <TextBlock Text="Alt" FontWeight="SemiBold" FontSize="12"/>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- Dictation mode -->
+        <TextBlock Text="Бичлэгийн горим" Style="{StaticResource FormLabel}" Margin="0,0,0,8"/>
+
+        <RadioButton x:Name="PushToTalkRadio" Margin="0,4" GroupName="DictationMode"
+                     Checked="OnDictationModeChanged">
+            <StackPanel Margin="4,0">
+                <TextBlock Text="Дарж ярих (Push-to-Talk)" FontWeight="SemiBold" FontSize="13"/>
+                <TextBlock Text="Ctrl+Alt дарж барьж ярина, тавихад текст болно" Style="{StaticResource FormDescription}"/>
+            </StackPanel>
+        </RadioButton>
+
+        <RadioButton x:Name="ToggleRadio" Margin="0,8" GroupName="DictationMode"
+                     Checked="OnDictationModeChanged">
+            <StackPanel Margin="4,0">
+                <TextBlock Text="Солих (Toggle)" FontWeight="SemiBold" FontSize="13"/>
+                <TextBlock Text="Ctrl+Alt дарж эхлүүлнэ, дахин дарж зогсооно" Style="{StaticResource FormDescription}"/>
+            </StackPanel>
+        </RadioButton>
+
+        <RadioButton x:Name="HandsFreeRadio" Margin="0,8" GroupName="DictationMode"
+                     Checked="OnDictationModeChanged">
+            <StackPanel Margin="4,0">
+                <TextBlock Text="Чөлөөтэй (Hands-Free)" FontWeight="SemiBold" FontSize="13"/>
+                <TextBlock Text="Ctrl+Alt дарж эхлүүлнэ, чимээгүй болоход автомат зогсоно" Style="{StaticResource FormDescription}"/>
+            </StackPanel>
+        </RadioButton>
+    </StackPanel>
+</UserControl>

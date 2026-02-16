@@ -1,0 +1,35 @@
+<UserControl x:Class="DuudlagaFlow.Views.Settings.AudioSettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Padding="16">
+
+    <StackPanel>
+        <!-- Microphone selection -->
+        <TextBlock Text="Микрофон" Style="{StaticResource FormLabel}"/>
+        <TextBlock Text="Бичлэгт ашиглах микрофоноо сонгоно уу" Style="{StaticResource FormDescription}" Margin="0,0,0,6"/>
+        <ComboBox x:Name="MicrophoneCombo" Margin="0,0,0,16"
+                  SelectionChanged="OnMicrophoneChanged" Padding="8,6"/>
+
+        <!-- Test microphone -->
+        <TextBlock Text="Микрофон шалгах" Style="{StaticResource FormLabel}"/>
+        <Grid Margin="0,4,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="TestMicButton" Content="Шалгах" Grid.Column="0"
+                    Style="{StaticResource SecondaryButton}"
+                    Click="OnTestMicClick"/>
+            <ProgressBar x:Name="MicLevelBar" Grid.Column="1" Margin="12,0,0,0"
+                         Minimum="0" Maximum="1" Height="20"/>
+        </Grid>
+        <TextBlock x:Name="MicTestStatus" Margin="0,8,0,0" FontSize="11"
+                   Foreground="{StaticResource TextSecondaryBrush}"/>
+
+        <Separator Margin="0,16"/>
+
+        <!-- Refresh -->
+        <Button Content="Микрофонуудыг дахин уншах" Style="{StaticResource SecondaryButton}"
+                HorizontalAlignment="Left" Click="OnRefreshDevicesClick"/>
+    </StackPanel>
+</UserControl>

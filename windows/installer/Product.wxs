@@ -1,0 +1,75 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+
+  <Package Name="Duudlaga Flow"
+           Manufacturer="DuudlagaFlow"
+           Version="1.0.0.0"
+           UpgradeCode="98110159-FF72-4328-B9F6-059A26501644"
+           Scope="perUser"
+           Codepage="1251"
+           InstallerVersion="500">
+
+    <SummaryInformation Description="Mongolian Speech-to-Text Dictation App" />
+
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <MajorUpgrade DowngradeErrorMessage="Шинэ хувилбар аль хэдийн суулгагдсан байна." />
+
+    <Icon Id="AppIcon" SourceFile="..\DuudlagaFlow\Resources\app.ico" />
+    <Property Id="ARPPRODUCTICON" Value="AppIcon" />
+
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="License.rtf" />
+
+    <Feature Id="Main" Title="Duudlaga Flow" Level="1">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentGroupRef Id="Shortcuts" />
+    </Feature>
+
+  </Package>
+
+  <!-- Directory structure -->
+  <Fragment>
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="INSTALLFOLDER" Name="DuudlagaFlow" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="AppMenuFolder" Name="Duudlaga Flow" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="DesktopFolder" />
+  </Fragment>
+
+  <!-- Application files harvested from publish output -->
+  <Fragment>
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Files Include="..\DuudlagaFlow\bin\Release\net8.0-windows\win-x64\publish\**" />
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- Shortcuts -->
+  <Fragment>
+    <ComponentGroup Id="Shortcuts">
+      <Component Id="StartMenuShortcut" Directory="AppMenuFolder" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
+        <Shortcut Id="StartMenuLink"
+                  Name="Duudlaga Flow"
+                  Target="[INSTALLFOLDER]DuudlagaFlow.exe"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="AppIcon" />
+        <RemoveFolder Id="RemoveAppMenuFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\DuudlagaFlow" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+
+      <Component Id="DesktopShortcut" Directory="DesktopFolder" Guid="B2C3D4E5-F6A7-8901-BCDE-F12345678901">
+        <Shortcut Id="DesktopLink"
+                  Name="Duudlaga Flow"
+                  Target="[INSTALLFOLDER]DuudlagaFlow.exe"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="AppIcon" />
+        <RegistryValue Root="HKCU" Key="Software\DuudlagaFlow" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+</Wix>

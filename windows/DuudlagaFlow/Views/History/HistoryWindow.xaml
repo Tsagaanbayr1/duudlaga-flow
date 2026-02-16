@@ -1,0 +1,98 @@
+<Window x:Class="DuudlagaFlow.Views.History.HistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Duudlaga Flow - Түүх"
+        Width="480" Height="500"
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource AppWindow}">
+
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search bar -->
+        <Grid Grid.Row="0" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox x:Name="SearchBox" Grid.Column="0"
+                     Style="{StaticResource AppTextBox}"
+                     TextChanged="OnSearchChanged">
+                <TextBox.Tag>Хайх...</TextBox.Tag>
+            </TextBox>
+        </Grid>
+
+        <!-- History list -->
+        <ListBox x:Name="HistoryList" Grid.Row="1"
+                 BorderThickness="1"
+                 BorderBrush="{StaticResource BorderBrush}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="4,6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Text content -->
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="2"
+                                   Text="{Binding Text}"
+                                   TextWrapping="Wrap"
+                                   MaxHeight="40"
+                                   TextTrimming="CharacterEllipsis"
+                                   FontSize="13"/>
+
+                        <!-- Timestamp -->
+                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                   FontSize="11"
+                                   Foreground="{StaticResource TextSecondaryBrush}"
+                                   Margin="0,4,0,0">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0:yyyy-MM-dd HH:mm} · {1:F1}с">
+                                    <Binding Path="Timestamp"/>
+                                    <Binding Path="DurationSeconds"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+
+                        <!-- Actions -->
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,4,0,0">
+                            <Button Content="Хуулах" FontSize="11" Padding="8,2"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Tag="{Binding Text}"
+                                    Click="OnCopyClick"/>
+                            <Button Content="Устгах" FontSize="11" Padding="8,2" Margin="4,0,0,0"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Tag="{Binding Id}"
+                                    Click="OnDeleteClick"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Bottom bar -->
+        <Grid Grid.Row="2" Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="CountText" Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource TextSecondaryBrush}"
+                       FontSize="11"/>
+            <Button Content="Бүгдийг устгах" Grid.Column="1"
+                    Style="{StaticResource SecondaryButton}"
+                    Click="OnDeleteAllClick"/>
+        </Grid>
+    </Grid>
+</Window>

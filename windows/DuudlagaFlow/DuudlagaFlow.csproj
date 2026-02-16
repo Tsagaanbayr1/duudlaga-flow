@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <AssemblyName>DuudlagaFlow</AssemblyName>
+    <RootNamespace>DuudlagaFlow</RootNamespace>
+    <Version>1.0.0</Version>
+    <Description>Mongolian Speech-to-Text Dictation App</Description>
+    <Company>DuudlagaFlow</Company>
+    <Product>Duudlaga Flow</Product>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\app.ico" />
+    <Resource Include="Resources\icon_16.png" />
+    <Resource Include="Resources\icon_32.png" />
+    <Resource Include="Resources\icon_128.png" />
+    <Resource Include="Resources\icon_256.png" />
+  </ItemGroup>
+
+</Project>
