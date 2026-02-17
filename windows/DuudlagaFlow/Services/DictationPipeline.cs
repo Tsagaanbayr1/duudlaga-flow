@@ -104,6 +104,7 @@ public class DictationPipeline
                 audioData,
                 _settings.ApiToken,
                 _settings.Punctuate,
+                _settings.UseStandardStt,
                 _transcriptionCts.Token);
 
             var pasted = await _textInsertion.InsertTextAsync(text);

@@ -44,11 +44,76 @@ public class ChimegeApiClient
         };
     }
 
-    public async Task<string> TranscribeAsync(byte[] audioData, string token, bool punctuate, CancellationToken ct = default)
+    public async Task<string> TranscribeAsync(byte[] audioData, string token, bool punctuate, bool useStandardStt, CancellationToken ct = default)
     {
         var cleanToken = token.Trim();
+
+        if (useStandardStt)
+        {
+            return await TranscribeStandardAsync(audioData, cleanToken, ct);
+        }
+
         var uuid = await SubmitAudioAsync(audioData, cleanToken, ct);
         return await PollForTranscriptAsync(uuid, cleanToken, ct);
+    }
+
+    private async Task<string> TranscribeStandardAsync(byte[] audioData, string token, CancellationToken ct)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, Constants.SttUrl);
+        request.Headers.Add("Token", token);
+        request.Content = new ByteArrayContent(audioData);
+        request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("audio/wav");
+
+        HttpResponseMessage response;
+        try
+        {
+            response = await _httpClient.SendAsync(request, ct);
+        }
+        catch (TaskCanceledException)
+        {
+            throw new ChimegeApiException("Хугацаа дууссан, сүлжээ шалгана уу");
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new ChimegeApiException($"Сүлжээний алдаа: {ex.Message}");
+        }
+
+        var body = await response.Content.ReadAsStringAsync(ct);
+
+        return response.StatusCode switch
+        {
+            HttpStatusCode.OK => ParseTranscriptionResponse(body),
+            HttpStatusCode.BadRequest => throw new ChimegeApiException($"Аудио алдаа: {body}"),
+            HttpStatusCode.Forbidden => throw new ChimegeApiException($"Token алдаа: {body}"),
+            HttpStatusCode.InternalServerError => throw new ChimegeApiException($"Серверийн алдаа: {body}"),
+            HttpStatusCode.ServiceUnavailable => throw new ChimegeApiException("Сервер ачаалалтай, дахин оролдоно уу"),
+            _ => throw new ChimegeApiException($"Алдаа {(int)response.StatusCode}: {body}")
+        };
+    }
+
+    private static string ParseTranscriptionResponse(string body)
+    {
+        // Try parsing as JSON first
+        try
+        {
+            using var doc = JsonDocument.Parse(body);
+            if (doc.RootElement.TryGetProperty("transcription", out var transcription))
+            {
+                var text = transcription.GetString()?.Trim() ?? "";
+                if (!string.IsNullOrEmpty(text))
+                    return text;
+            }
+        }
+        catch (JsonException)
+        {
+            // Not JSON, treat as plain text
+        }
+
+        // Fall back to plain text
+        var plainText = body.Trim();
+        if (string.IsNullOrEmpty(plainText))
+            throw new ChimegeApiException("Яриа илрээгүй, дахин оролдоно уу");
+        return plainText;
     }
 
     private async Task<string> SubmitAudioAsync(byte[] audioData, string token, CancellationToken ct)
@@ -138,19 +203,61 @@ public class ChimegeApiClient
         throw new ChimegeApiException("Хугацаа дууссан, дахин оролдоно уу");
     }
 
-    public async Task<(bool Success, string Message)> TestTokenAsync(string token)
+    public async Task<(bool Success, string Message)> TestTokenAsync(string token, bool useStandardStt)
     {
         var cleanToken = token.Trim();
         var silentWav = WavEncoder.EncodeSilence(0.5);
 
         try
         {
-            var uuid = await SubmitAudioAsync(silentWav, cleanToken, CancellationToken.None);
-            return (true, $"Token зөв! (UUID: {uuid[..Math.Min(8, uuid.Length)]}...)");
+            if (useStandardStt)
+            {
+                // For standard STT, just check that the API accepts the token (HTTP 200).
+                // Silence returns empty body which is expected.
+                await TestStandardTokenAsync(silentWav, cleanToken, CancellationToken.None);
+                return (true, "Token зөв!");
+            }
+            else
+            {
+                var uuid = await SubmitAudioAsync(silentWav, cleanToken, CancellationToken.None);
+                return (true, $"Token зөв! (UUID: {uuid[..Math.Min(8, uuid.Length)]}...)");
+            }
         }
         catch (ChimegeApiException ex)
         {
             return (false, ex.Message);
         }
+    }
+
+    private async Task TestStandardTokenAsync(byte[] audioData, string token, CancellationToken ct)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, Constants.SttUrl);
+        request.Headers.Add("Token", token);
+        request.Content = new ByteArrayContent(audioData);
+        request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("audio/wav");
+
+        HttpResponseMessage response;
+        try
+        {
+            response = await _httpClient.SendAsync(request, ct);
+        }
+        catch (TaskCanceledException)
+        {
+            throw new ChimegeApiException("Хугацаа дууссан, сүлжээ шалгана уу");
+        }
+        catch (HttpRequestException ex)
+        {
+            throw new ChimegeApiException($"Сүлжээний алдаа: {ex.Message}");
+        }
+
+        if (response.StatusCode == HttpStatusCode.OK)
+            return; // Token is valid
+
+        var body = await response.Content.ReadAsStringAsync(ct);
+        throw response.StatusCode switch
+        {
+            HttpStatusCode.Forbidden => new ChimegeApiException($"Token алдаа: {body}"),
+            _ => new ChimegeApiException($"Алдаа {(int)response.StatusCode}: {body}")
+        };
     }
 }

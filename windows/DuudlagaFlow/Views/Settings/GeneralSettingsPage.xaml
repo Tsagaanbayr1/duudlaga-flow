@@ -22,6 +22,16 @@
 
         <Separator Margin="0,16"/>
 
+        <!-- STT Mode -->
+        <TextBlock Text="STT горим" Style="{StaticResource FormLabel}"/>
+        <TextBlock Text="Chimege Console дээр идэвхжүүлсэн үйлчилгээгээ сонгоно уу" Style="{StaticResource FormDescription}" Margin="0,0,0,6"/>
+        <ComboBox x:Name="SttModeCombo" Padding="8,6" SelectionChanged="OnSttModeChanged">
+            <ComboBoxItem Content="Монгол STT" Tag="standard"/>
+            <ComboBoxItem Content="Монгол STT-Long" Tag="long"/>
+        </ComboBox>
+
+        <Separator Margin="0,16"/>
+
         <!-- Punctuation -->
         <CheckBox x:Name="PunctuateCheck" Content="Цэг тэмдэг автоматаар нэмэх"
                   Margin="0,8" Checked="OnPunctuateChanged" Unchecked="OnPunctuateChanged"/>

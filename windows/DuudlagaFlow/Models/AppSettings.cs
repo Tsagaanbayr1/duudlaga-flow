@@ -7,6 +7,9 @@ public class AppSettings
     [JsonPropertyName("apiToken")]
     public string ApiToken { get; set; } = "";
 
+    [JsonPropertyName("useStandardStt")]
+    public bool UseStandardStt { get; set; } = true;
+
     [JsonPropertyName("punctuate")]
     public bool Punctuate { get; set; } = true;
 

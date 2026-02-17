@@ -8,7 +8,7 @@
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
     <AssemblyName>DuudlagaFlow</AssemblyName>
     <RootNamespace>DuudlagaFlow</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Description>Mongolian Speech-to-Text Dictation App</Description>
     <Company>DuudlagaFlow</Company>
     <Product>Duudlaga Flow</Product>

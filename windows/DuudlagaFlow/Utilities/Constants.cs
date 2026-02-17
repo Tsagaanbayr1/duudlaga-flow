@@ -2,6 +2,7 @@ namespace DuudlagaFlow.Utilities;
 
 public static class Constants
 {
+    public const string SttUrl = "https://api.chimege.com/v1.2/transcribe";
     public const string SttLongUrl = "https://api.chimege.com/v1.2/stt-long";
     public const string SttLongTranscriptUrl = "https://api.chimege.com/v1.2/stt-long-transcript";
     public const string ApiConsoleUrl = "https://console.chimege.com";

@@ -3,7 +3,7 @@
 
   <Package Name="Duudlaga Flow"
            Manufacturer="DuudlagaFlow"
-           Version="1.0.0.0"
+           Version="1.1.0.0"
            UpgradeCode="98110159-FF72-4328-B9F6-059A26501644"
            Scope="perUser"
            Codepage="1251"

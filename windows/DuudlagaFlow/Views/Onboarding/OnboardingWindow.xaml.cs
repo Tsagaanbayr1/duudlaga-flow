@@ -97,7 +97,7 @@ public partial class OnboardingWindow : Window
         OnboardTokenStatus.Text = "Шалгаж байна...";
         OnboardTokenStatus.Foreground = new SolidColorBrush(Color.FromRgb(100, 100, 100));
 
-        var (success, message) = await App.Instance.ApiClient.TestTokenAsync(token);
+        var (success, message) = await App.Instance.ApiClient.TestTokenAsync(token, App.Instance.Settings.UseStandardStt);
 
         OnboardTokenStatus.Text = message;
         OnboardTokenStatus.Foreground = success

@@ -23,6 +23,7 @@ public partial class GeneralSettingsPage : UserControl
         {
             var settings = App.Instance.Settings;
             TokenBox.Password = settings.ApiToken ?? "";
+            SttModeCombo.SelectedIndex = settings.UseStandardStt ? 0 : 1;
             PunctuateCheck.IsChecked = settings.Punctuate;
             LaunchAtLoginCheck.IsChecked = settings.LaunchAtLogin;
             _isLoading = false;
@@ -56,13 +57,21 @@ public partial class GeneralSettingsPage : UserControl
         TokenStatus.Text = "Шалгаж байна...";
         TokenStatus.Foreground = new SolidColorBrush(Color.FromRgb(100, 100, 100));
 
-        var (success, message) = await App.Instance.ApiClient.TestTokenAsync(token);
+        var (success, message) = await App.Instance.ApiClient.TestTokenAsync(token, App.Instance.Settings.UseStandardStt);
 
         TokenStatus.Text = message;
         TokenStatus.Foreground = success
             ? new SolidColorBrush(Color.FromRgb(50, 180, 80))
             : new SolidColorBrush(Color.FromRgb(220, 50, 50));
         TestTokenButton.IsEnabled = true;
+    }
+
+    private void OnSttModeChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (_isLoading) return;
+        App.Instance.Settings.UseStandardStt = SttModeCombo.SelectedIndex == 0;
+        App.Instance.SaveSettings();
+        TokenStatus.Text = "";
     }
 
     private void OnPunctuateChanged(object sender, RoutedEventArgs e)
