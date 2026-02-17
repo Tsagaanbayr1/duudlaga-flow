@@ -27,6 +27,10 @@ final class AppSettings {
         didSet { UserDefaults.standard.set(showFlowBar, forKey: Constants.Defaults.showFlowBar) }
     }
 
+    var useStandardStt: Bool {
+        didSet { UserDefaults.standard.set(useStandardStt, forKey: Constants.Defaults.useStandardStt) }
+    }
+
     var onboardingCompleted: Bool {
         didSet { UserDefaults.standard.set(onboardingCompleted, forKey: Constants.Defaults.onboardingCompleted) }
     }
@@ -44,6 +48,7 @@ final class AppSettings {
         self.selectedMicrophoneID = defaults.string(forKey: Constants.Defaults.selectedMicrophoneID)
         self.launchAtLogin = defaults.bool(forKey: Constants.Defaults.launchAtLogin)
         self.showFlowBar = defaults.object(forKey: Constants.Defaults.showFlowBar) as? Bool ?? true
+        self.useStandardStt = defaults.object(forKey: Constants.Defaults.useStandardStt) as? Bool ?? true
         self.onboardingCompleted = defaults.bool(forKey: Constants.Defaults.onboardingCompleted)
     }
 }

@@ -40,6 +40,15 @@ ehthumbs.db
 # === WiX toolset cache ===
 .wix/
 
+# === AI Tools ===
+.agent/
+.claude/
+.codex/
+.cursor/
+.gemini/
+.opencode/
+agents/
+
 # === Misc ===
 *.log
 *.env

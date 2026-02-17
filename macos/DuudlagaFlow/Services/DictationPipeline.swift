@@ -80,7 +80,8 @@ final class DictationPipeline {
                 let text = try await apiClient.transcribe(
                     audioData: audioData,
                     token: settings.apiToken,
-                    punctuate: settings.punctuate
+                    punctuate: settings.punctuate,
+                    useStandardStt: settings.useStandardStt
                 )
 
                 let pasted = await textInsertion.insertText(text)

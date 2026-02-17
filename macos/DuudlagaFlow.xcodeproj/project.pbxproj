@@ -434,7 +434,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chimege.DuudlagaFlow;
 				PRODUCT_NAME = DuudlagaFlow;
 				SDKROOT = macosx;
@@ -459,7 +459,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.0;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.chimege.DuudlagaFlow;
 				PRODUCT_NAME = DuudlagaFlow;
 				SDKROOT = macosx;

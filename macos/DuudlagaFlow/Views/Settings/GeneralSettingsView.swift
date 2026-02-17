@@ -18,6 +18,18 @@ struct GeneralSettingsView: View {
     var body: some View {
         Form {
             Section("API Тохиргоо") {
+                Picker("STT горим", selection: $settings.useStandardStt) {
+                    Text("Монгол STT").tag(true)
+                    Text("Монгол STT-Long").tag(false)
+                }
+                .onChange(of: settings.useStandardStt) {
+                    testStatus = .idle
+                }
+
+                Text("Chimege Console дээр идэвхжүүлсэн үйлчилгээгээ сонгоно уу")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
                 HStack {
                     if showToken {
                         TextField("Chimege API Token", text: $settings.apiToken)
@@ -115,10 +127,10 @@ struct GeneralSettingsView: View {
     private func testAPIToken() {
         testStatus = .testing
         Task {
-            let result = await apiClient.testToken(settings.apiToken)
+            let result = await apiClient.testToken(settings.apiToken, useStandardStt: settings.useStandardStt)
             switch result {
-            case .success:
-                testStatus = .success("Token зөв байна!")
+            case .success(let msg):
+                testStatus = .success(msg)
             case .failure(let error):
                 testStatus = .failure(error.localizedDescription)
             }

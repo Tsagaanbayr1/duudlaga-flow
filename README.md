@@ -17,7 +17,7 @@
 
 > **Шаардлага:** Windows 10/11 (64-bit)
 
-[**DuudlagaFlow-1.0.0-x64.msi татах**](https://github.com/Tsagaanbayr1/duudlaga-flow/releases)
+[**DuudlagaFlow-1.0.0-x64.msi татах**](https://github.com/Tsagaanbayr1/duudlaga-flow/releases/download/v1.2.1/DuudlagaFlow-1.0.0-x64.msi)
 
 **Товчлуур:** `Ctrl + Alt`
 
@@ -29,7 +29,7 @@
 
 > **Шаардлага:** macOS 13+
 
-[**DuudlagaFlow.dmg татах**](https://github.com/Tsagaanbayr1/duudlaga-flow/releases)
+[**DuudlagaFlow-1.2.1.dmg татах**](https://github.com/Tsagaanbayr1/duudlaga-flow/releases/download/v1.2.1/DuudlagaFlow-1.2.1.dmg)
 
 **Товчлуур:** `Control + Option`
 

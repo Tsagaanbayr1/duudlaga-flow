@@ -81,7 +81,7 @@ dotnet publish DuudlagaFlow -c Release -r win-x64 --self-contained
 
 ## Төслийн бүтэц
 
-```
+```shh
 windows/
 ├── DuudlagaFlow.sln
 ├── DuudlagaFlow/

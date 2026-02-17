@@ -2,6 +2,7 @@ import Foundation
 
 enum Constants {
     static let apiURL = URL(string: "https://api.chimege.com/v1.2/transcribe")!
+    static let sttURL = URL(string: "https://api.chimege.com/v1.2/transcribe")!
     static let apiConsoleURL = URL(string: "https://console.chimege.com")!
 
     enum Defaults {
@@ -12,6 +13,7 @@ enum Constants {
         static let launchAtLogin = "launch_at_login"
         static let showFlowBar = "show_flow_bar"
         static let onboardingCompleted = "onboarding_completed"
+        static let useStandardStt = "use_standard_stt"
     }
 
     enum Audio {

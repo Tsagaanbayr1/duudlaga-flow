@@ -35,8 +35,13 @@ private struct SttLongTranscriptResponse: Decodable {
     let duration: Double?
 }
 
+private struct SttStandardResponse: Decodable {
+    let transcription: String
+}
+
 final class ChimegeAPIClient {
     private let session: URLSession
+    private let sttURL = Constants.sttURL
     private let sttLongURL = URL(string: "https://api.chimege.com/v1.2/stt-long")!
     private let sttLongTranscriptURL = URL(string: "https://api.chimege.com/v1.2/stt-long-transcript")!
 
@@ -46,15 +51,63 @@ final class ChimegeAPIClient {
         self.session = URLSession(configuration: config)
     }
 
-    func transcribe(audioData: Data, token: String, punctuate: Bool) async throws -> String {
+    func transcribe(audioData: Data, token: String, punctuate: Bool, useStandardStt: Bool = true) async throws -> String {
         let cleanToken = token.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // Step 1: Submit audio
-        let uuid = try await submitAudio(audioData: audioData, token: cleanToken)
+        if useStandardStt {
+            return try await transcribeStandard(audioData: audioData, token: cleanToken)
+        }
 
-        // Step 2: Poll for result
+        // STT-Long flow: Submit audio then poll
+        let uuid = try await submitAudio(audioData: audioData, token: cleanToken)
         let text = try await pollForTranscript(uuid: uuid, token: cleanToken)
         return text
+    }
+
+    private func transcribeStandard(audioData: Data, token: String) async throws -> String {
+        var request = URLRequest(url: sttURL)
+        request.httpMethod = "POST"
+        request.setValue(token, forHTTPHeaderField: "Token")
+        request.setValue("audio/wav", forHTTPHeaderField: "Content-Type")
+        request.httpBody = audioData
+
+        let data: Data
+        let response: URLResponse
+
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch {
+            throw ChimegeAPIError.networkError(error)
+        }
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw ChimegeAPIError.serverError("Invalid response")
+        }
+
+        let body = String(data: data, encoding: .utf8) ?? "(empty)"
+
+        switch httpResponse.statusCode {
+        case 200:
+            // Try JSON {"transcription": "..."} first, fall back to plain text
+            if let jsonResponse = try? JSONDecoder().decode(SttStandardResponse.self, from: data) {
+                let text = jsonResponse.transcription.trimmingCharacters(in: .whitespacesAndNewlines)
+                if text.isEmpty { throw ChimegeAPIError.emptyResponse }
+                return text
+            }
+            let text = body.trimmingCharacters(in: .whitespacesAndNewlines)
+            if text.isEmpty { throw ChimegeAPIError.emptyResponse }
+            return text
+        case 400:
+            throw ChimegeAPIError.invalidAudio(body)
+        case 403:
+            throw ChimegeAPIError.invalidToken(body)
+        case 500:
+            throw ChimegeAPIError.serverError(body)
+        case 503:
+            throw ChimegeAPIError.overloaded(body)
+        default:
+            throw ChimegeAPIError.unexpectedStatus(httpResponse.statusCode, body)
+        }
     }
 
     private func submitAudio(audioData: Data, token: String) async throws -> String {
@@ -131,7 +184,7 @@ final class ChimegeAPIClient {
     }
 
     /// Test the API token by sending a minimal WAV
-    func testToken(_ token: String) async -> Result<String, ChimegeAPIError> {
+    func testToken(_ token: String, useStandardStt: Bool = true) async -> Result<String, ChimegeAPIError> {
         let cleanToken = token.trimmingCharacters(in: .whitespacesAndNewlines)
 
         // Generate a tiny 0.5s silent WAV
@@ -139,8 +192,16 @@ final class ChimegeAPIClient {
         let wavData = WAVEncoder.encode(samples: silentSamples, sampleRate: 16000, channels: 1, bitDepth: 16)
 
         do {
-            let uuid = try await submitAudio(audioData: wavData, token: cleanToken)
-            return .success("Token зөв! (UUID: \(uuid.prefix(8))...)")
+            if useStandardStt {
+                _ = try await transcribeStandard(audioData: wavData, token: cleanToken)
+                return .success("Token зөв байна!")
+            } else {
+                let uuid = try await submitAudio(audioData: wavData, token: cleanToken)
+                return .success("Token зөв! (UUID: \(uuid.prefix(8))...)")
+            }
+        } catch ChimegeAPIError.emptyResponse {
+            // Empty transcription from silent audio is expected — token is valid
+            return .success("Token зөв байна!")
         } catch let error as ChimegeAPIError {
             return .failure(error)
         } catch {
